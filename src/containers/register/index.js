@@ -32,7 +32,7 @@ class Register extends Component {
       email: '',
       password: '',
       password2: '',
-      confirmUrlBase: 'http://localhost:3002/confirm/',
+      confirmUrlBase: 'http://localhost:3000/confirm/',
     });
   }
 

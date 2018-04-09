@@ -20,9 +20,12 @@ class Account extends Component {
         return (
             <div>
                 <h1>Account Details</h1>
-                <p>Welcome to TournamentHub, { user.name }!</p>
+                <p>Welcome to TournamentHub, { user.email }!</p>
+                <div>
+                    <Link className="btn btn-primary" to="/logout">Logout</Link>
+                </div>
             </div>
-        );
+        )
     }
 }
 

@@ -17,7 +17,7 @@ class Logout extends Component {
       return (
         <div>
             <p>You've been logged out</p>
-            <Link className="btn btn-primary" to="/login">Login -></Link>
+            <Link className="btn btn-primary" to="/login">Login</Link>
         </div>
       )
     return (

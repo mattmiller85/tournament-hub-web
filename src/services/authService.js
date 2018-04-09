@@ -1,20 +1,18 @@
 //@ts-check
 
 import cfg from '../config'
-import store from '../store';
+import store from '../store'
+import TournamentHubService from './tournamentHubService'
 
-class AuthService {
+class AuthService extends TournamentHubService {
 
     constructor() {
+        super();
         this.isAuthenticated = false;
         this.getUserInfo().then(info => { 
             this.isAuthenticated = info != null; 
             store.dispatch({ type: 'LOGIN_UPDATE', isLoggedIn: this.isAuthenticated, user: info });
         });
-    }
-
-    getToken() {
-        return localStorage.getItem("tournament-hub-token");
     }
 
     async getUserInfo() {
@@ -29,7 +27,7 @@ class AuthService {
                 'x-access-token': this.getToken()
             }
         });
-        return userInfoResponse.json();
+        return this.returnJSONFromResponseIfAuth(userInfoResponse);
     }
 
     async register(user) {
@@ -42,11 +40,6 @@ class AuthService {
             body: JSON.stringify(user)
           });
         return registerResponse.json();
-    }
-
-    async logout() {
-        localStorage.removeItem("tournament-hub-token");
-        store.dispatch({ type: 'LOGIN_UPDATE', isLoggedIn: false, user: null });
     }
 
     /**
@@ -67,8 +60,7 @@ class AuthService {
         if (loginInfo.auth) {
             localStorage.setItem("tournament-hub-token", loginInfo.token);
             this.isAuthenticated = true;
-            debugger;
-            store.dispatch({ type: 'LOGIN_UPDATE', loggedIn: this.isAuthenticated, user: loginInfo.user });
+            store.dispatch({ type: 'LOGIN_UPDATE', isLoggedIn: this.isAuthenticated, user: loginInfo.user });
         }
         return Promise.resolve(loginInfo);
     }

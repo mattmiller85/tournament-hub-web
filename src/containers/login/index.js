@@ -2,7 +2,7 @@
 import React, {Component} from 'react'
 import { push } from 'react-router-redux'
 import { withRouter } from 'react-router'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import './index.css'
@@ -21,8 +21,10 @@ class Login extends Component {
       e.preventDefault();
       const loginResponse = await authService.login(this.state);
       if (loginResponse.auth) {
-        //this.props.loggedIn();
-        return <Redirect to="/" />
+        this.props.loggedIn();
+        //return <Redirect to="/" />
+      } else {
+        alert(`Login failed: ${loginResponse.message}`)
       }
       return null;
     };

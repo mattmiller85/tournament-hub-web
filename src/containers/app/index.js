@@ -5,23 +5,23 @@ import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import Home from '../home'
-import About from '../about'
+import Tournaments from '../tournaments'
+import Tournament from '../tournament'
+import TournamentEdit from '../tournament/edit'
 import Account from '../account'
 import Login from '../login'
 import Logout from '../logout'
 import Register from '../register'
 import Confirm from '../confirm'
-
+import TournamentSearch from '../../components/tournament-search'
 
 const mapStateToProps = (state) => {
     return { isLoggedIn: state.auth.isLoggedIn }
 }
 
-//const PrivateRouteConnected = connect(mapStateToProps, null)(PrivateRoute);
-
 class App extends Component { 
     hideNav(e) {
-        //document.querySelector(".navbar-toggler").click();
+        
     }
 
     render() { return (
@@ -37,19 +37,13 @@ class App extends Component {
                     <NavLink className="nav-link" activeClassName="active" to="/" onClick={ this.hideNav }>Home</NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink className="nav-link" activeClassName="active" to="/about" onClick={ this.hideNav }>About</NavLink>
+                    <NavLink className="nav-link" activeClassName="active" to="/tournaments" onClick={ this.hideNav }>Tournaments</NavLink>
                 </li>
                 <li className="nav-item">
                     <NavLink className="nav-link" activeClassName="active" to="/account" onClick={ this.hideNav }>Account</NavLink>
                 </li>
-                <li className="nav-item">
-                    <NavLink className="nav-link" activeClassName="active" to="/logout" onClick={ this.hideNav }>Logout</NavLink>
-                </li>
                 </ul>
-                <form className="form-inline my-2 my-lg-0">
-                <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />
-                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
+                <TournamentSearch />
             </div>
             </nav>
             <main role="main" className="container">
@@ -59,7 +53,9 @@ class App extends Component {
                     <Route path="/logout" component={Logout} />
                     <Route path="/register" component={Register} />
                     <Route path="/confirm/:userid?" component={Confirm} />
-                    <Route path="/about" component={About} />
+                    <Route path="/tournaments" component={Tournaments} />
+                    <Route path="/tournament/:tournamentId/edit" component={TournamentEdit} />
+                    <Route path="/tournament/:tournamentId" component={Tournament} />
                     <Route path="/account" component={Account} />
                 </Switch>
             </main>
