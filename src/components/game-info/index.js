@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class Game extends Component {
+export default class GameInfo extends Component {
 
     componentDidMount() {
 
@@ -13,9 +13,9 @@ export default class Game extends Component {
         }
         return (
             <div>
-                <div>At {game.location}</div>
-                <div>Number {game.number}</div>
-                <div>{game.team1Description} vs {game.team2Description}</div>
+                <span>Game #{game.number}, </span>
+                <span>at {game.location}, </span>
+                <span>{game.team1Description} vs {game.team2Description}</span>
             </div>
         )
     }

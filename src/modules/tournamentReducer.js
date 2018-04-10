@@ -7,6 +7,9 @@ export default (previousState, action) => {
             return { ...previousState, tournamentList: action.tournamentList };
         case 'TOURNAMENT_SEARCH_RESULTS':
             return { ...previousState, searchResults: action.searchResults };
+        case 'TOURNAMENT_UPDATED':
+        case 'TOURNAMENT_ADDED':
+            return { ...previousState, tournament: action.tournament };
         default:
             return previousState || initialTournamentState;
     }

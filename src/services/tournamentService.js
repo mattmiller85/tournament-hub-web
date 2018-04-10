@@ -44,6 +44,66 @@ class TournamentService  extends TournamentHubService {
         });
         return this.returnJSONFromResponseIfAuth(tournamentResponse);
     }
+
+    async createTournament(tournament) {
+        const response = await fetch(`${cfg.apiUrl}tournament`, {
+            method: 'POST',
+            headers: {
+                'user-agent': 'TournamentHub Web',
+                'content-type': 'application/json',
+                'x-access-token': this.getToken()
+            },
+            body: JSON.stringify(tournament)
+          });
+
+        store.dispatch({ type: `TOURNAMENT_ADDED`, tournament: tournament  });
+        return this.returnJSONFromResponseIfAuth(response);
+    }
+
+    async saveTournament(tournament) {
+        const response = await fetch(`${cfg.apiUrl}tournament/${tournament.id}`, {
+            method: 'PUT',
+            headers: {
+                'user-agent': 'TournamentHub Web',
+                'content-type': 'application/json',
+                'x-access-token': this.getToken()
+            },
+            body: JSON.stringify(tournament)
+          });
+
+        store.dispatch({ type: `TOURNAMENT_UPDATED`, tournament: tournament })
+        return this.returnJSONFromResponseIfAuth(response);
+    }
+
+    async createGame(tournamentId, game) {
+        const response = await fetch(`${cfg.apiUrl}tournament/${tournamentId}/game/add`, {
+            method: 'POST',
+            headers: {
+                'user-agent': 'TournamentHub Web',
+                'content-type': 'application/json',
+                'x-access-token': this.getToken()
+            },
+            body: JSON.stringify(game)
+          });
+        game = await this.returnJSONFromResponseIfAuth(response);
+        store.dispatch({ type: `GAME_ADDED`, tournamentId: tournamentId, game })
+        return Promise.resolve(game);
+    }
+
+    async saveGame(tournamentId, game) {
+        const response = await fetch(`${cfg.apiUrl}tournament/${tournamentId}/game/save`, {
+            method: 'PUT',
+            headers: {
+                'user-agent': 'TournamentHub Web',
+                'content-type': 'application/json',
+                'x-access-token': this.getToken()
+            },
+            body: JSON.stringify(game)
+          });
+
+        store.dispatch({ type: `GAME_UPDATED`, tournamentId: tournamentId, game })
+        return this.returnJSONFromResponseIfAuth(response);
+    }
 }
 
 const tournamenService = new TournamentService();
