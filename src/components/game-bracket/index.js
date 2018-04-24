@@ -38,8 +38,8 @@ export default class GameBracket extends Component {
         ctx.strokeText(game.number, 5, height * .6);
 
         ctx.font = "10pt -apple-system, system-ui, Segoe UI";
-        ctx.strokeText(game.team1Description, 0, line1Height - 5);
-        ctx.strokeText(game.team2Description, 0, line2Height - 5);
+        ctx.strokeText(game.team1.name, 0, line1Height - 5);
+        ctx.strokeText(game.team2.name, 0, line2Height - 5);
 
         ctx.font = "italic 9pt -apple-system, system-ui, Segoe UI";
         ctx.strokeText(game.location, 50, height / 2);

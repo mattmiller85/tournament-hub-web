@@ -68,7 +68,7 @@ class TournamentEdit extends Component {
           </div>
         </div>
         <button type="submit" className="btn btn-primary">Save!</button>
-        <button type="button" onClick={(e) => this.props.goToBracket(tournament.id)} className="btn btn-default">View Bracket</button>
+        <button type="button" onClick={(e) => this.props.goToBracket(tournament.id)} className="btn btn-light">View Bracket</button>
       </form>
     );
   }

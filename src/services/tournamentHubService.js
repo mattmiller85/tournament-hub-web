@@ -15,7 +15,7 @@ export default class TournamentHubService {
         return fetchResponse.json().then(info => {
             if (info.auth === false) {
                 this.logout();
-                return Promise.resolve({});
+                return Promise.resolve(null);
             }
             return Promise.resolve(info);
         });

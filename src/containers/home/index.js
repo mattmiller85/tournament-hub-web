@@ -9,11 +9,14 @@ class Home extends Component {
     
     render() {
         const { isLoggedIn , user } = this.props;
-        const { name } = user || {};
+        let { name } = user || {};
+        if (name) {
+            name = `, ${name}`
+        }
         return (
             <div>
                 <h1>TournamentHub</h1>
-                <p>Welcome to TournamentHub, { name || "" }!</p>
+                <p>Welcome to TournamentHub{ name || "" }!</p>
                 <Link className="btn btn-primary" to={ isLoggedIn ? "/account" : "/login" }>
                     { isLoggedIn ? "Account Details" : "Login to TournamentHub" }
                 </Link>

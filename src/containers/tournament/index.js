@@ -14,7 +14,10 @@ export default class Tournament extends Component {
       return;
     }
     this.setState({ loading: true, tournament: null })
-    this.setState({ loading: false, tournament: await tournamentService.getTournament(tournamentId) });
+    const tournament = await tournamentService.getTournament(tournamentId);
+    if (!tournament)
+      return;
+    this.setState({ loading: false, tournament: tournament });
   }
 
   render() {

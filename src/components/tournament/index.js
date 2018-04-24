@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import GameBracket from '../game-bracket'
 import { Link } from 'react-router-dom'
+import bracketRendererService from '../../services/bracketRendererService';
 
 export default class Tournament extends Component {
 
@@ -8,50 +8,30 @@ export default class Tournament extends Component {
 
     }
 
+    initialize(el, tournament) {
+        if (!el || !tournament)
+            return;
+        //el.height = window.innerHeight - 200;
+        el.width = window.innerWidth;
+        window.addEventListener('resize', () => {
+            el.width = window.innerWidth;
+            //el.height = window.innerHeight - 200;
+            bracketRendererService.buildBracket(el, tournament);
+        }, false);
+        bracketRendererService.buildBracket(el, tournament);
+    }
+
+
     render() {
         const { tournament } = this.props;
         if (!tournament) {
             return <div />;
         }
         
-        const groups = tournament.games.map(g => g.bracketGroup).filter((value, index, self) => {
-            return self.indexOf(value) === index;
-        });
-        const brackets = groups.map(g => {
-            const games = tournament.games.filter(game => game.bracketGroup === g);
-            const roundGames = {};
-            tournament.games.map(g => g.round).filter((value, index, self) => {
-                return self.indexOf(value) === index;
-            }).map(r => {
-                return roundGames[r.toString()] = games.filter(game => game.round === r);
-            });
-            return {
-                group: g,
-                gamesByRound: roundGames
-            }
-        });
         return <div>
-                <h1>{tournament.name}</h1>
-                <Link to={ `/tournament/${tournament.id}/edit`}> edit </Link>
-                {brackets.map(bracket => {
-                    return (<div key={bracket.group}>
-                        <h2>Group {bracket.group}</h2>
-                        <div>
-                            {Object.entries(bracket.gamesByRound).map(r => {
-                                const gameData = bracket.gamesByRound[r[0]];
-                                if (!gameData)
-                                    return <div>{r[0]}</div>;
-                                const games = gameData.sort((a, b) => a.number > b.number).map(g => <GameBracket key={g.id} game={g} round={r[0]} />);
-                                return (
-                                    <div style={ { display: 'inline-block', verticalAlign: 'top' } } key={r[0]}>
-                                        <h3>Round {r[0]}</h3>                                
-                                        {games}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        </div>) 
-                })}
-            </div>;
+            <h1>{ tournament.name }</h1>
+            <Link className="btn btn-dark" to={ `/tournament/${tournament.id}/edit`}> edit </Link>
+            <canvas ref={ (el) => this.initialize(el, tournament)} width="500" height="500"></canvas>
+        </div>;
     }
 }

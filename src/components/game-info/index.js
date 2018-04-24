@@ -15,7 +15,7 @@ export default class GameInfo extends Component {
             <div>
                 <span>Game #{game.number}, </span>
                 <span>at {game.location}, </span>
-                <span>{game.team1Description} vs {game.team2Description}</span>
+                <span>{game.team1.name} vs {game.team2.name}</span>
             </div>
         )
     }
