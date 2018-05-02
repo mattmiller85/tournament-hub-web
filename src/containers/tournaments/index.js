@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
+import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import tournamenService from '../../services/tournamentService';
@@ -30,6 +31,7 @@ class Tournaments extends Component {
         return (
             <div>
                 <h1>Your Tournaments</h1>
+                <Link className="btn btn-success" to="/tournament/add">add</Link>
                 <TournamentList tournamentList={ tournamentList } isLoggedIn={ isLoggedIn } />
                 {searchResultsDisplay}
             </div>

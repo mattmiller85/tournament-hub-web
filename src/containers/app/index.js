@@ -8,7 +8,9 @@ import Home from '../home'
 import Tournaments from '../tournaments'
 import Tournament from '../tournament'
 import TournamentEdit from '../tournament/edit'
+import TournamentAdd from '../tournament/add'
 import GameEdit from '../game/edit'
+import TeamEdit from '../team/edit'
 import Account from '../account'
 import Login from '../login'
 import Logout from '../logout'
@@ -57,7 +59,10 @@ class App extends Component {
                     <Route path="/tournaments" component={Tournaments} />
                     <Route path="/tournament/:tournamentId/edit/game/:gameId" component={GameEdit} />
                     <Route path="/tournament/:tournamentId/edit/game/add" component={GameEdit} />
+                    <Route path="/tournament/:tournamentId/edit/team/:teamId" component={TeamEdit} />
+                    <Route path="/tournament/:tournamentId/edit/team/add" component={TeamEdit} />
                     <Route path="/tournament/:tournamentId/edit" component={TournamentEdit} />
+                    <Route path="/tournament/add" component={TournamentAdd} />
                     <Route path="/tournament/:tournamentId" component={Tournament} />
                     <Route path="/account" component={Account} />
                 </Switch>

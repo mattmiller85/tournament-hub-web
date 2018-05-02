@@ -79,6 +79,10 @@ class GameEdit extends Component {
                     <label htmlFor="t-location">Location</label>
                     <input value={game.location} onChange={(e) => this.handleInput(e)} type="text" className="form-control" name="location" id="t-location" placeholder="Enter location" />
                 </div>
+                <div className="form-group">
+                    <label htmlFor="t-gameDate">Date/Time</label>
+                    <input value={game.gameDate} onChange={(e) => this.handleInput(e)} type="datetime-local" className="form-control" name="gameDate" id="t-gameDate" placeholder="Enter date/time" />
+                </div>
                 <div className="form-progress">
                     <label htmlFor="t-progress">Progress</label>
                     <input value={game.progress} onChange={(e) => this.handleInput(e)} type="text" className="form-control" name="progress" id="t-progress" placeholder="Enter progress" />
@@ -88,7 +92,7 @@ class GameEdit extends Component {
                     <input value={game.round} onChange={(e) => this.handleInput(e)} type="text" className="form-control" name="round" id="t-round" placeholder="Enter round" />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="t-gracketGroup">Bracket Group</label>
+                    <label htmlFor="t-bracketGroup">Bracket Group</label>
                     <input value={game.bracketGroup} onChange={(e) => this.handleInput(e)} type="text" className="form-control" name="bracketGroup" id="t-bracketGroup" placeholder="Enter bracket group" />
                 </div>
                 <div className="form-group">
@@ -98,6 +102,10 @@ class GameEdit extends Component {
                 <div className="form-group">
                     <label>Team 2</label>
                     <TeamEdit team={game.team2} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="t-winnerTeamId">Winner</label>
+                    <input value={game.winnerTeamId} onChange={(e) => this.handleInput(e)} type="text" className="form-control" name="winnerTeamId" id="t-winnerTeamId" placeholder="Enter winner" />
                 </div>
                 <button type="submit" className="btn btn-primary">Save!</button>
                 <button type="button" onClick={(e) => this.props.back()} className="btn btn-light">Cancel</button>

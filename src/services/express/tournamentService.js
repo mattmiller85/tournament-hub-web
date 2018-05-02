@@ -45,6 +45,17 @@ export default class TournamentService  extends TournamentHubService {
         return this.returnJSONFromResponseIfAuth(tournamentResponse);
     }
 
+    async getTemplate(templateId) {
+        const templateResponse = await fetch(`${cfg.apiUrl}tournament/template/${templateId}`, {
+            headers: {
+                'user-agent': 'TournamentHub Web',
+                'content-type': 'application/json',
+                'x-access-token': this.getToken()
+            }
+        });
+        return this.returnJSONFromResponseIfAuth(templateResponse);
+    }
+
     async createTournament(tournament) {
         const response = await fetch(`${cfg.apiUrl}tournament`, {
             method: 'POST',
@@ -72,6 +83,20 @@ export default class TournamentService  extends TournamentHubService {
           });
 
         store.dispatch({ type: `TOURNAMENT_UPDATED`, tournament })
+        return this.returnJSONFromResponseIfAuth(response);
+    }
+
+    async removeTournament(tournamentId) {
+        const response = await fetch(`${cfg.apiUrl}tournament/${tournamentId}`, {
+            method: 'DELETE',
+            headers: {
+                'user-agent': 'TournamentHub Web',
+                'content-type': 'application/json',
+                'x-access-token': this.getToken()
+            }
+          });
+
+        store.dispatch({ type: `TOURNAMENT_DELETED`, tournamentId })
         return this.returnJSONFromResponseIfAuth(response);
     }
 

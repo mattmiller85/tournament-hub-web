@@ -17,7 +17,7 @@ export default class TeamEdit extends Component {
 
     componentDidMount() {
         const { team } = this.props;
-        const isNewTeam = !team || team.name === '';
+        const isNewTeam = true //!team || !team.id || team.id === '';
         const boundTeam = isNewTeam ? team : { ...team };
         this.setState({ isEditing: isNewTeam, autoSave: isNewTeam, team: boundTeam, originalTeam: { ...team } });
     }
@@ -64,7 +64,7 @@ export default class TeamEdit extends Component {
                     </div>
                     <div className="form-color">
                         <label htmlFor="t-color">Color</label>
-                        <input value={team.color} onChange={(e) => this.handleInput(e)} type="text" className="form-control" name="color" id="t-color" placeholder="Enter color" />
+                        <input value={team.color} onChange={(e) => this.handleInput(e)} type="color" className="form-control" name="color" id="t-color" placeholder="Enter color" />
                     </div>
                     { !autoSave ? (
                         <div>

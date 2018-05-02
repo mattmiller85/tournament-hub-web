@@ -45,6 +45,17 @@ export default class TournamentService  extends TournamentHubService {
         return this.returnJSONFromResponseIfAuth(tournamentResponse);
     }
 
+    async getTemplate(templateId) {
+        const tournamentResponse = await fetch(`${cfg.apiUrl}tournament/template/${templateId}`, {
+            headers: {
+                'user-agent': 'TournamentHub Web',
+                'content-type': 'application/json',
+                'Authorization': this.getToken()
+            }
+        });
+        return this.returnJSONFromResponseIfAuth(tournamentResponse);
+    }
+
     async createTournament(tournament) {
         const response = await fetch(`${cfg.apiUrl}tournament`, {
             method: 'POST',

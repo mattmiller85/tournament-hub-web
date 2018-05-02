@@ -1,7 +1,9 @@
 import Moment from 'moment'
+import { EventEmitter } from 'events'
 
-class BracketRendererService {
+class BracketRendererService extends EventEmitter {
     constructor() {
+        super();
         this.leftOffset = 0;
         this.topOffset = 20;
         this.templateBuilders = {
@@ -13,6 +15,7 @@ class BracketRendererService {
             2: 150,
             3: 300
         }
+        this.gameTeamRects = [];
     }
 
     buildBracket(canvas, tournament) {
@@ -25,9 +28,66 @@ class BracketRendererService {
         if (tournament.type !== 1) {
             throw new Error("We only support single elimination right now.");
         }
+        this.gameTeamRects.length = 0;
+        const elemLeft = canvas.offsetLeft,
+        elemTop = canvas.offsetTop;
+
+        canvas.addEventListener('click', (event) => {
+            var x = event.pageX - elemLeft,
+            y = event.pageY - elemTop;
+
+            // Collision detection between clicked offset and element.
+            this.gameTeamRects.forEach((element) => {
+                if (y > element.y && y < element.y + element.height 
+                    && x > element.x && x < element.x + element.width) {
+                        this.onTeamClick(tournament, element.gameId, element.teamNumber);
+                }
+            });
+            
+        }, false);
         const ctx = canvas.getContext('2d');
         ctx.font = "12pt -apple-system, system-ui, Segoe UI";
         renderer(ctx, tournament.games);
+        this.gameTeamRects.forEach((element) => {
+            ctx.strokeRect(element.x, element.y, element.width, element.height);
+        });
+    }
+
+    onTeamClick(tournament, gameId, teamNumber) {
+        const game = tournament.games.find(g => g.id === gameId);
+        if (!game) {
+            return;
+        }
+        const team = game[`team${teamNumber.toString()}`];
+        if (!team.id || team.id === '') {
+            alert("This is a placeholder team so they can't advance.");
+            return;
+        }
+        game.winnerTeamId = team.id;
+        const { advances } = game;
+        if (!advances || !advances.gameNumber) {
+            // champ game. last round
+            this.emit("teamAdvanced");
+            return;
+        }
+        const toGame = tournament.games.find(g => g.number === advances.gameNumber);
+        const oldTeam = toGame[`team${advances.teamNumber.toString()}`];
+        if (oldTeam && oldTeam.id) {
+            // then they were set up as the winners of other games, wipe them out.
+            tournament.games.filter(g => g.number > toGame.number).forEach(g => {
+                if (g.team1.id === oldTeam.id) {
+                    g.team1 = { name: "N/A", id: '', color: '', roster: [] };
+                }
+                if (g.team2.id === oldTeam.id) {
+                    g.team2 = { name: "N/A", id: '', color: '', roster: [] };
+                }
+                if (g.winnerTeamId === oldTeam.id) {
+                    g.winnerTeamId = '';
+                }
+            });
+        }
+        toGame[`team${advances.teamNumber.toString()}`] = team;
+        this.emit("teamAdvanced");
     }
 
     scaleCanvas(ctx, numRounds) {
@@ -84,6 +144,10 @@ class BracketRendererService {
         ctx.strokeText(game.team1.name, leftOffset, topOffset - 5)
         ctx.strokeText(game.team2.name, leftOffset, topOffset + gameBracketHeight - 5)
 
+        this.gameTeamRects.push( { gameId: game.id, teamNumber: 1, width: 200, height: 20, x: leftOffset, y: topOffset - 20 });
+        this.gameTeamRects.push( { gameId: game.id, teamNumber: 2, width: 200, height: 20, x: leftOffset, y: topOffset + gameBracketHeight - 20 });
+
+
         ctx.font = "italic 9pt -apple-system, system-ui, Segoe UI";
         ctx.strokeText(game.location, leftOffset + 50, topOffset + (gameBracketHeight / 2) - 10);
         ctx.strokeText(new Moment(game.gameDate).format("MM/DD/YYYY h:mm a"), leftOffset + 50, topOffset + (gameBracketHeight / 2) + 5);
@@ -92,13 +156,14 @@ class BracketRendererService {
         ctx.strokeText(game.number, leftOffset + 2, topOffset + (gameBracketHeight / 2) + 5);
 
         const winnerTeam = this.getWinnerTeam(game);
+
         if (game.round === numRounds) {
             //this is the champ game
             ctx.moveTo(200 + leftOffset, (gameBracketHeight / 2) + topOffset);
             ctx.lineTo(400 + leftOffset, (gameBracketHeight / 2) + topOffset);
             ctx.stroke();
             if(winnerTeam && winnerTeam.name)
-                ctx.strokeText(winnerTeam.name, leftOffset, topOffset + gameBracketHeight - 5)
+                ctx.strokeText(winnerTeam.name, 205 + leftOffset, (gameBracketHeight / 2) + topOffset - 5)
         }
 
         return topOffset + gameBracketHeight + (50 * (game.round === 1 ? 1 : game.round + 1));

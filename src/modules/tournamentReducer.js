@@ -10,6 +10,8 @@ export default (previousState, action) => {
         case 'TOURNAMENT_UPDATED':
         case 'TOURNAMENT_ADDED':
             return { ...previousState, tournament: action.tournament };
+        case 'TOURNAMENT_DELETED':
+            return { ...previousState, tournamentId: action.tournamentId, tournamentList: previousState.tournamentList.filter(t => t.id !== action.tournamentId) };
         default:
             return previousState || initialTournamentState;
     }
